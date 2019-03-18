@@ -1,0 +1,4 @@
+---
+  
+GAIA_USERNAME: "{{ vaulted_gaia_username }}"
+GAIA_PASSWORD: "{{ vaulted_gaia_password }}"

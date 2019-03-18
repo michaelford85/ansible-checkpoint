@@ -1,0 +1,56 @@
+#https://ash-sidhu.blog/2018/11/07/using-ansible-for-automating-tasks-on-checkpoint-firewall/
+---
+- name: Show current API version
+  hosts: ckp
+  connection: local
+  gather_facts: no
+  vars_files:
+    - ./vars/default_vars.yml
+    - ./credentials/gaia_credentials.yml
+
+  tasks:
+
+    - name: Create Web Services API Session
+      uri:
+        url: "https://{{ansible_host }}/web_api/login"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+        body:
+          user: "{{ GAIA_USERNAME }}"
+          password: "{{ GAIA_PASSWORD }}"
+        body_format: json
+        return_content: yes
+        validate_certs: False
+      register: login_output
+
+    # - debug:
+    #     var: login_output
+
+    - name: Retrieve API version
+      uri:
+        url: "https://{{ansible_host }}/web_api/show-api-versions"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-chkp-sid: "{{ login_output.json.sid }}"
+        body_format: raw
+        body: "{ }"
+        return_content: yes
+        validate_certs: False
+      register: versions_output
+
+    - name: Print API version
+      debug:
+        var: versions_output.json
+
+    - name: Terminate Web Services API Session
+      uri:
+        url: "https://{{ansible_host }}/web_api/logout"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-chkp-sid: "{{ login_output.json.sid }}"
+        body_format: raw
+        body: "{ }"
+        validate_certs: False

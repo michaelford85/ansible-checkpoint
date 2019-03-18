@@ -1,0 +1,72 @@
+#https://ash-sidhu.blog/2018/11/07/using-ansible-for-automating-tasks-on-checkpoint-firewall/
+---
+- name: Show all ACL entries
+  hosts: ckp
+  connection: local
+  gather_facts: no
+  vars_files:
+    - ./vars/default_vars.yml
+    - ./credentials/gaia_credentials.yml
+
+  tasks:
+
+    - name: Create Web Services API Session
+      uri:
+        url: "https://{{ansible_host }}/web_api/login"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+        body:
+          user: "{{ GAIA_USERNAME }}"
+          password: "{{ GAIA_PASSWORD }}"
+        body_format: json
+        return_content: yes
+        validate_certs: False
+      register: login_output
+
+    # - name: debug login_output
+    #   debug:
+    #     var: login_output
+    #
+    # - name: debug login_output
+    #   debug:
+    #     var: login_output.json.sid
+
+    - name: Retrieve Access Rulebase
+      uri:
+        url: "https://{{ansible_host }}/web_api/show-access-rulebase"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-chkp-sid: "{{ login_output.json.sid }}"
+        body:
+          limit: 50
+          offset: 0
+          name: Network
+        body_format: json
+        return_content: yes
+        validate_certs: False
+      register: rules_output
+
+
+    # - name: debug hosts_output
+    #   debug:
+    #     var: hosts_output.json
+
+    - name: Print existing Access Rules
+      debug:
+        msg: "Access rule: {{ item.name }}"
+      loop: "{{ rules_output.json.rulebase }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Terminate Web Services API Session
+      uri:
+        url: "https://{{ansible_host }}/web_api/logout"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-chkp-sid: "{{ login_output.json.sid }}"
+        body: "{ }"
+        body_format: raw
+        validate_certs: False
