@@ -92,7 +92,7 @@
         return_content: yes
         validate_certs: False
       loop: "{{ rules_output.json.rulebase }}"
-      when: item.name == "New Rule"
+      when: item.name == "{{ acl_to_delete }}"
 
     - name: Publish changes
       uri:
