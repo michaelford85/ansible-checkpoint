@@ -27,22 +27,6 @@
     # - debug:
     #     var: login_output
 
-    - name: Show API version
-      uri:
-        url: "https://{{ansible_host }}/web_api/show-api-versions"
-        method: POST
-        headers:
-          Content-Type: "application/json"
-          X-chkp-sid: "{{ login_output.json.sid }}"
-        body_format: raw
-        body: "{ }"
-        return_content: yes
-        validate_certs: False
-      register: versions_output
-
-    # - debug:
-    #     var: versions_output
-
     - name: Discover existing sessions
       uri:
         url: "https://{{ansible_host }}/web_api/show-sessions"
@@ -83,7 +67,7 @@
           Content-Type: "application/json"
           X-chkp-sid: "{{ login_output.json.sid }}"
         body:
-          name: New Rule
+          name: "{{ acl_to_add }}"
           source: DMZZone
           destination: InternalZone
           action: Accept
