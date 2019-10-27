@@ -1,0 +1,87 @@
+#https://ash-sidhu.blog/2018/11/07/using-ansible-for-automating-tasks-on-checkpoint-firewall/
+---
+- name: Test Playbook
+  hosts: ckp
+  connection: network_cli
+  gather_facts: no
+  vars_files:
+    - ./credentials/snow_credentials.yml
+
+  tasks:
+
+    - name: Disable Paging
+      cli_command:
+        command: set clienv rows 0
+
+    - name: Get Hostname from Firewall
+      cli_command:
+        command: show hostname
+      register: hostname_result
+
+    - name: Show Hostname
+      debug:
+        var: hostname_result
+
+    - name: Get active configuration
+      cli_command:
+        command: show configuration
+      register: config_result
+
+    - name: Create Backup Directory
+      file:
+        path: "./backup/{{ hostname_result.stdout}}"
+        state: directory
+      delegate_to: localhost
+
+    - name: Get Ansible Tower Facts
+      setup:
+      delegate_to: localhost
+      run_once: yes
+
+    - name: Get Timestamp
+      set_fact:
+        timestamp: "{{ ansible_date_time.epoch }}"
+      delegate_to: localhost
+      run_once: yes
+
+    - name: Store Backup
+      copy:
+        content: "{{ config_result.stdout_lines|join('\n') }}"
+        dest: "./backup/{{ hostname_result.stdout}}/{{ timestamp }}.cfg"
+
+    - name: Create an incident
+      snow_record:
+        username: "{{ SNOW_USERNAME }}"
+        password: "{{ SNOW_PASSWORD }}"
+        instance: dev71868
+        state: present
+        attachment: "./backup/{{ hostname_result.stdout}}/{{ timestamp }}.cfg"
+        data:
+          short_description: "This is a test incident opened by Ansible for Checkpoint Firewall {{ hostname_result.stdout}}"
+          severity: 3
+          priority: 2
+      register: new_incident
+
+    # - name: Show incident details
+    #   debug:
+    #     var: new_incident
+
+    - name: Update the incident with the attachment
+      snow_record:
+        username: "{{ SNOW_USERNAME }}"
+        password: "{{ SNOW_PASSWORD }}"
+        instance: dev71868
+        state: present
+        number: "{{ new_incident.record.number }}"
+        attachment: "./backup/{{ hostname_result.stdout}}/{{ timestamp }}.cfg"
+      register: updated_incident
+
+    # - name: Show incident attachment
+    #   debug:
+    #     var: updated_incident.attached_file
+
+    - name: Delete Backup Directory
+      file:
+        path: "./backup/{{ hostname_result.stdout}}"
+        state: absent
+      delegate_to: localhost
