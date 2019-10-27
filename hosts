@@ -5,7 +5,7 @@ firewall3 ansible_host=3.84.30.151
 
 
 [ckp:vars]
-ansible_user=admin
-ansible_port=22
-ansible_ssh_private_key_file=~/.ssh/maf-tiger-team-private.pem
+;ansible_user=admin
+;ansible_port=22
+;ansible_ssh_private_key_file=~/.ssh/maf-tiger-team-private.pem
 ansible_network_os=vyos
