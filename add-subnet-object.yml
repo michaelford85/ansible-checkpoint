@@ -12,6 +12,7 @@
         name: "{{ subnet_name }}"
         state: present
         subnet: "{{ subnet }}"
+        mask_length: 24
         subnet_mask: 255.255.255.0
 
     - name: publish
