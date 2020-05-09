@@ -11,8 +11,8 @@
       cp_mgmt_access_rule:
         layer: Network
         name: "{{ rule_name }}"
-        source: DMZZone
-        destination: InternalZone
+        source: "{{ source_object }}"
+        destination: "{{ dest_object }}"
         action: "{{ rule_action }}"
         enabled: true
         position: top
