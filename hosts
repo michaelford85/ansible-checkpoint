@@ -1,11 +1,11 @@
 [ckp]
-firewall1 ansible_host=52.71.56.93
-firewall2 ansible_host=54.173.213.112
-firewall3 ansible_host=3.84.30.151
-
+firewall1 ansible_host=3.91.245.58
+firewall2 ansible_host=3.87.185.44
+firewall3 ansible_host=3.89.124.80
 
 [ckp:vars]
 ;ansible_user=admin
-;ansible_port=22
-;ansible_ssh_private_key_file=~/.ssh/maf-tiger-team-private.pem
-ansible_network_os=vyos
+;ansible_password=password
+ansible_network_os=checkpoint
+ansible_httpapi_validate_certs=no
+ansible_httpapi_use_ssl=yes

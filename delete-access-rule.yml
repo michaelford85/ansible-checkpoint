@@ -1,0 +1,17 @@
+#https://ash-sidhu.blog/2018/11/07/using-ansible-for-automating-tasks-on-checkpoint-firewall/
+---
+- name: Delete ACL Rule
+  hosts: ckp
+  connection: httpapi
+  gather_facts: no
+
+  tasks:
+
+    - name: Delete Access Rule
+      cp_mgmt_access_rule:
+        layer: Network
+        name: "{{ rule_name }}"
+        state: absent
+
+    - name: publish
+      cp_mgmt_publish:

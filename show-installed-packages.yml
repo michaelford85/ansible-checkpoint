@@ -1,0 +1,13 @@
+---
+- name: Show all installed packages
+  hosts: ckp
+  connection: httpapi
+  gather_facts: no
+
+  tasks:
+
+    - name: show-packages
+      cp_mgmt_package_facts:
+        details_level: standard
+        limit: 50
+        offset: 0

@@ -1,0 +1,22 @@
+---
+- name: Add ACL Rule
+  hosts: ckp
+  connection: httpapi
+  gather_facts: no
+
+  tasks:
+
+
+    - name: Add Access Rule
+      cp_mgmt_access_rule:
+        layer: Network
+        name: "{{ rule_name }}"
+        source: DMZZone
+        destination: InternalZone
+        action: "{{ rule_action }}"
+        enabled: true
+        position: top
+        state: present
+
+    - name: publish
+      cp_mgmt_publish:

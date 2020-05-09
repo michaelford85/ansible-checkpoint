@@ -1,0 +1,26 @@
+#https://ash-sidhu.blog/2018/11/07/using-ansible-for-automating-tasks-on-checkpoint-firewall/
+---
+- name: Show all ACL entries
+  hosts: ckp
+  connection: httpapi
+  gather_facts: no
+  # vars_files:
+  #   - ./vars/default_vars.yml
+  #   - ./credentials/gaia_credentials.yml
+
+  tasks:
+
+    - name: show-access-rulebase
+      cp_mgmt_access_rule_facts:
+        name: Network
+      register: rules_output
+
+    - debug:
+        var: rules_output
+
+    # - name: Print existing Access Rules
+    #   debug:
+    #     msg: "Access rule: {{ item.name }}"
+    #   loop: "{{ rules_output.json.rulebase }}"
+    #   loop_control:
+    #     label: "{{ item.name }}"
