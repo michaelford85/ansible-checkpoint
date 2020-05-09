@@ -1,0 +1,18 @@
+#https://ash-sidhu.blog/2018/11/07/using-ansible-for-automating-tasks-on-checkpoint-firewall/
+---
+- name: Add Subnet Object
+  hosts: ckp
+  connection: httpapi
+  gather_facts: no
+
+  tasks:
+
+    - name: Add subnet object
+      cp_mgmt_network:
+        name: "{{ subnet_name }}"
+        state: present
+        subnet: "{{ subnet }}"
+        subnet_mask: 255.255.255.0
+
+    - name: publish
+      cp_mgmt_publish:

@@ -1,0 +1,16 @@
+#https://ash-sidhu.blog/2018/11/07/using-ansible-for-automating-tasks-on-checkpoint-firewall/
+---
+- name: Delete Subnet Object
+  hosts: ckp
+  connection: httpapi
+  gather_facts: no
+
+  tasks:
+
+    - name: Delete subnet object
+      cp_mgmt_network:
+        name: "{{ subnet_name }}"
+        state: absent
+
+    - name: publish
+      cp_mgmt_publish:
