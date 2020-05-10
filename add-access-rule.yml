@@ -9,7 +9,7 @@
 
     - set_fact:
         # source_network: "{{ source_object | regex_search('\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b') }}"
-        source_network: "{{ source_object | regex_replace('^''|''\,', '') }}"
+        source_network: "{{ source_object | regex_search('(?<=\\'\\')(.*?)(?=\\'\\'\\,)') }}"
 
 
     - debug:
