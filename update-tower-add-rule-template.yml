@@ -6,6 +6,7 @@
   gather_facts: no
   vars_files:
     - ./credentials/tower-credentials.yml
+    - /tmp/subnet_output.json
 
   tasks:
     - name: Build survey_spec from template

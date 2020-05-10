@@ -15,7 +15,7 @@
         "min": null,
         "max": null,
         "required": true,
-        "choices": "{% for item in subnet_output.ansible_facts.networks.objects %}{% if item.subnet4 is defined %}{{ item.name, item.subnet4 }}\n{% endif %}{% endfor %}",
+        "choices": "{% for item in ansible_facts.networks.objects %}{% if item.subnet4 is defined %}{{ item.name, item.subnet4 }}\n{% endif %}{% endfor %}",
         "variable": "source_object",
         "type": "multiplechoice"
     },
@@ -24,7 +24,7 @@
         "min": null,
         "max": null,
         "required": true,
-        "choices": "{% for item in subnet_output.ansible_facts.networks.objects %}{% if item.subnet4 is defined %}{{ item.name, item.subnet4 }}\n{% endif %}{% endfor %}",
+        "choices": "{% for item in ansible_facts.networks.objects %}{% if item.subnet4 is defined %}{{ item.name, item.subnet4 }}\n{% endif %}{% endfor %}",
         "variable": "dest_object",
         "type": "multiplechoice"
     },
