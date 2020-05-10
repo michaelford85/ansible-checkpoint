@@ -14,3 +14,17 @@
 
     - name: publish
       cp_mgmt_publish:
+
+    - name: List subnet objects
+      cp_mgmt_network_facts:
+      register: subnet_output
+
+    # - name: debug subnets
+    #   debug:
+    #     var: subnet_output
+
+    - copy:
+        dest: /tmp/subnet_output.json
+        content: "{{ subnet_output }}"
+      run_once: yes
+      delegate_to: localhost
