@@ -15,6 +15,13 @@
     #   debug:
     #     var: subnet_output
 
+
+    - file:
+        path: /tmp/subnet_output.json
+        state: absent
+      run_once: yes
+      delegate_to: localhost
+      
     - copy:
         dest: /tmp/subnet_output.json
         content: "{{ subnet_output }}"
