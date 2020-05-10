@@ -37,16 +37,21 @@
         msg: "The source network name is {{ subnet_output | json_query(network_query) }}"
       vars:
         network_query: "ansible_facts.networks.objects[?subnet4=='{{source_network}}'].name"
-    # - name: Add Access Rule
-    #   cp_mgmt_access_rule:
-    #     layer: Network
-    #     name: "{{ rule_name }}"
-    #     source: "{{ source_object }}"
-    #     destination: "{{ dest_object }}"
-    #     action: "{{ rule_action }}"
-    #     enabled: true
-    #     position: top
-    #     state: present
-    #
-    # - name: publish
-    #   cp_mgmt_publish:
+    - name: Add Access Rule
+      cp_mgmt_access_rule:
+        layer: Network
+        name: "{{ rule_name }}"
+        source: "{{ subnet_output | json_query(source_query) }}"
+        destination: "{{ subnet_output | json_query(dest_query) }}"
+        # source: "{{ source_object }}"
+        # destination: "{{ dest_object }}"
+        action: "{{ rule_action }}"
+        enabled: true
+        position: top
+        state: present
+      vars:
+        source_query: "ansible_facts.networks.objects[?subnet4=='{{source_network}}'].name"
+        dest_query: "ansible_facts.networks.objects[?subnet4=='{{dest_network}}'].name"
+
+    - name: publish
+      cp_mgmt_publish:
