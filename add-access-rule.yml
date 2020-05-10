@@ -13,38 +13,37 @@
         dest_network: "{{ dest_object | regex_search('\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b') }}"
       run_once: yes
 
-    - debug:
-        var: source_network
-
-    - debug:
-        var: dest_network
+    # - debug:
+    #     var: source_network
+    #
+    # - debug:
+    #     var: dest_network
 
     - name: Retrieve networks from firewalls
       cp_mgmt_network_facts:
       register: subnet_output
 
 
-    - debug:
-        var: subnet_output
+    # - debug:
+    #     var: subnet_output
+    #
+    # - debug:
+    #     var: item
+    #   loop: "{{ subnet_output | json_query(network_query) }}"
+    #   vars:
+    #     network_query: "ansible_facts.networks.objects[?subnet4=='{{source_network}}'].name"
 
-    - debug:
-        var: item
-      loop: "{{ subnet_output | json_query(network_query) }}"
-      vars:
-        network_query: "ansible_facts.networks.objects[?subnet4=='{{source_network}}'].name"
+    # - debug:
+    #     msg: "The source network name is {{ subnet_output | json_query(network_query) }}"
+    #   vars:
+    #     network_query: "ansible_facts.networks.objects[?subnet4=='{{source_network}}'].name"
 
-    - debug:
-        msg: "The source network name is {{ subnet_output | json_query(network_query) }}"
-      vars:
-        network_query: "ansible_facts.networks.objects[?subnet4=='{{source_network}}'].name"
     - name: Add Access Rule
       cp_mgmt_access_rule:
         layer: Network
         name: "{{ rule_name }}"
         source: "{{ subnet_output | json_query(source_query) }}"
         destination: "{{ subnet_output | json_query(dest_query) }}"
-        # source: "{{ source_object }}"
-        # destination: "{{ dest_object }}"
         action: "{{ rule_action }}"
         enabled: true
         position: top
