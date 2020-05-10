@@ -34,7 +34,9 @@
         network_query: "ansible_facts.networks.objects[?subnet4=='{{source_network}}'].name"
 
     - debug:
-        msg: "The source network name is {{ subnet_output | json_query('ansible_facts.networks.objects[?subnet4=='{{source_network}}'].name') }}"
+        msg: "The source network name is {{ subnet_output | json_query(network_query) }}"
+      vars:
+        network_query: "ansible_facts.networks.objects[?subnet4=='{{source_network}}'].name"
     # - name: Add Access Rule
     #   cp_mgmt_access_rule:
     #     layer: Network
