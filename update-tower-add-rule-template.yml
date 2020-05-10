@@ -2,7 +2,6 @@
 ---
 - name: Update Ansible Tower Checkpoint Access Rule Job Template
   hosts: tower
-  connection: httpapi
   gather_facts: no
   vars_files:
     - ./credentials/tower-credentials.yml
