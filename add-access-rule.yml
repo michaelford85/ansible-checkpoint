@@ -7,13 +7,26 @@
   tasks:
 
 
-    - set_fact:
-        # source_network: "{{ source_object | regex_search('\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b') }}"
-        source_network: "{{ source_object | regex_findall('(?<=\'\')(.*?)(?=\'\'\,)') }}"
-
+    - name: Retrieve IP address from user selections
+      set_fact:
+        source_network: "{{ source_object | regex_search('\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b') }}"
+        dest_network: "{{ dest_object | regex_search('\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b') }}"
+      run_once: yes
 
     - debug:
         var: source_network
+
+    - debug:
+        var: dest_network
+
+    - name: Retrieve networks from firewalls
+      cp_mgmt_network_facts:
+      register: subnet_output
+
+
+    - debug:
+        var: subnet_output
+
     # - name: Add Access Rule
     #   cp_mgmt_access_rule:
     #     layer: Network
