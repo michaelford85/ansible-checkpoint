@@ -22,7 +22,7 @@
           playbook: "add-access-rule.yml"
           credential: "Checkpoint login"
           survey_enabled: true
-          survey_spec: "{{ lookup('template', '/tmp/new-rule-survey.json') }}"
+          survey_spec: "{{ lookup('file', '/tmp/new-rule-survey.json') }}"
           tower_username: "{{ TOWER_USERNAME }}"
           tower_password: "{{ TOWER_PASSWORD }}"
           tower_host: https://ansibletower.michaelanthonyford.com
