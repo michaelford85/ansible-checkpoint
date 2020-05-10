@@ -27,5 +27,6 @@
 
     - copy:
         dest: /tmp/subnet_output.json
+        content: "{{ subnet_output }}"
       run_once: yes
       delegate_to: localhost
