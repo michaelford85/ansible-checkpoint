@@ -9,3 +9,11 @@ firewall3 ansible_host=3.89.124.80
 ansible_network_os=checkpoint
 ansible_httpapi_validate_certs=no
 ansible_httpapi_use_ssl=yes
+
+[servers]
+webserver ansible_host=webserver.michaelanthonyford.com
+tower ansible_host=ansibletower.michaelanthonyford.com
+
+[servers:vars]
+;ansible_user=ec2-user
+;ansible_ssh_private_key_file=~/.ssh/mford-useast-1-key.pem

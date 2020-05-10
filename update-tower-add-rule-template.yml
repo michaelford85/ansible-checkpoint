@@ -1,0 +1,32 @@
+#https://ash-sidhu.blog/2018/11/07/using-ansible-for-automating-tasks-on-checkpoint-firewall/
+---
+- name: Update Ansible Tower Checkpoint Access Rule Job Template
+  hosts: tower
+  connection: httpapi
+  gather_facts: no
+  vars_files:
+    - ./credentials/tower-credentials.yml
+
+  tasks:
+    - name: Build survey_spec from template
+      template:
+        src: ./templates/new-rule-survey.j2
+        dest: /tmp/new-rule-survey.json
+
+    - name: Update Ansible Tower Checkpoint Access Rule Job Template
+      tower_job_template:
+          name: "Checkpoint Add Access Rule"
+          job_type: "run"
+          inventory: "Checkpoint Dynamic Inventory"
+          project: "Ansible Checkpoint Demo Exercises (tower-3.6 branch)"
+          playbook: "add-access-rule.yml"
+          credential: "Checkpoint login"
+          survey_enabled: true
+          survey_spec: "{{ lookup('template', '/tmp/new-rule-survey.json') }}"
+          tower_username: "{{ TOWER_USERNAME }}"
+          tower_password: "{{ TOWER_PASSWORD }}"
+          tower_host: https://ansibletower.michaelanthonyford.com
+          validate_certs: no
+          diff_mode_enabled: yes
+      delegate_to: localhost
+      run_once: yes

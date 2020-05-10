@@ -1,0 +1,22 @@
+#https://ash-sidhu.blog/2018/11/07/using-ansible-for-automating-tasks-on-checkpoint-firewall/
+---
+- name: List Subnet Objects
+  hosts: ckp
+  connection: httpapi
+  gather_facts: no
+
+  tasks:
+
+    - name: List subnet objects
+      cp_mgmt_network_facts:
+      register: subnet_output
+
+    - name: debug subnets
+      debug:
+        var: subnet_output
+
+    - template:
+        src: ./templates/new-rule-survey.j2
+        dest: survey.txt
+      run_once: yes
+      delegate_to: localhost

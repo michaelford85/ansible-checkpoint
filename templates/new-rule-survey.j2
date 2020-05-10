@@ -1,0 +1,42 @@
+{
+  "description": "",
+  "spec": [
+  {
+      "question_name": "What is the rule name?",
+      "min": null,
+      "max": null,
+      "required": true,
+      "default": "Dummy Rule",
+      "variable": "rule_name",
+      "type": "text"
+  }
+  {
+        "question_name": "What is the source network?",
+        "min": null,
+        "max": null,
+        "required": true,
+        "choices": "{% for item in subnet_output.ansible_facts.networks.objects %}{% if item.subnet4 is defined %}{{ item.name, item.subnet4 }}\n{% endif %}{% endfor %}",
+        "variable": "source_object",
+        "type": "multiplechoice"
+    },
+    {
+        "question_name": "What is the destination network?",
+        "min": null,
+        "max": null,
+        "required": true,
+        "choices": "{% for item in subnet_output.ansible_facts.networks.objects %}{% if item.subnet4 is defined %}{{ item.name, item.subnet4 }}\n{% endif %}{% endfor %}",
+        "variable": "dest_object",
+        "type": "multiplechoice"
+    },
+    {
+        "question_name": "What is the action?",
+        "min": null,
+        "max": null,
+        "required": true,
+        "choices": "Accept\nReject",
+        "variable": "rule_action",
+        "type": "multiplechoice"
+    }
+  ],
+  "name": ""
+}
