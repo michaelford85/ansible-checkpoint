@@ -1,17 +1,15 @@
 [ckp]
-firewall1 ansible_host=3.91.245.58
-firewall2 ansible_host=3.87.185.44
-firewall3 ansible_host=3.89.124.80
+firewall1 ansible_host=54.198.190.129
+firewall2 ansible_host=3.88.9.135
+firewall3 ansible_host=18.206.119.211
 
 [ckp:vars]
-;ansible_user=admin
-;ansible_password=password
 ansible_network_os=checkpoint
 ansible_httpapi_validate_certs=no
 ansible_httpapi_use_ssl=yes
 
 [servers]
-webserver ansible_host=webserver.michaelanthonyford.com
+webserver ansible_host=webserver.mford.io
 tower ansible_host=ansibletower.michaelanthonyford.com
 
 [servers:vars]
