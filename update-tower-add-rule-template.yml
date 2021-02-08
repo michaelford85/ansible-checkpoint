@@ -17,15 +17,15 @@
       tower_job_template:
           name: "Checkpoint Add Access Rule"
           job_type: "run"
-          inventory: "Checkpoint Dynamic Inventory"
-          project: "Ansible Checkpoint Demo Exercises (tower-3.6 branch)"
+          inventory: "Cloud Checkpoint Firewalls"
+          project: "Checkpoint Administration"
           playbook: "add-access-rule.yml"
-          credential: "Checkpoint login"
+          credential: "Checkpoint Firewall Machine Credential"
           survey_enabled: true
           survey_spec: "{{ lookup('file', '/tmp/new-rule-survey.json') }}"
           tower_username: "{{ TOWER_USERNAME }}"
           tower_password: "{{ TOWER_PASSWORD }}"
-          tower_host: https://ansibletower.michaelanthonyford.com
+          tower_host: https://ansibletower.mford.io
           validate_certs: no
           diff_mode_enabled: yes
       delegate_to: localhost
